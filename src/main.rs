@@ -7,20 +7,20 @@ fn main() {
     let mut count: u128 = 0;
     let mut stack: Vec<(i64, i64)> = vec![start_point];
 
-    while let Some(point) = stack.pop() {
-        if !seen.contains(&point) {
-            seen.insert(point);
-            let (x, y) = point;
-            if sum_digits(x) + sum_digits(y) <= max_digits_sum {
-                stack.push((x + 1, y));
-                stack.push((x, y + 1));
-                stack.push((x - 1, y));
-                stack.push((x, y - 1));
-                count += 1;
-            }
+    while let Some((x, y)) = stack.pop() {
+        if !seen.insert((x, y)) {
+            continue;
         }
+        if sum_digits(x) + sum_digits(y) > max_digits_sum {
+            continue;
+        }
+        stack.push((x + 1, y));
+        stack.push((x, y + 1));
+        stack.push((x - 1, y));
+        stack.push((x, y - 1));
+        count += 1;
     }
-    println!("Count: {}", count);
+    println!("{}", count);
 }
 
 fn sum_digits(num: i64) -> u8 {
